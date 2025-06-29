@@ -1,30 +1,71 @@
-const API_KEY = "YOUR API KEY"
+const apiKey = 'edb4e5d285c614b00d6a376afedd7a7d';  
 
-function handleFormSubmit(event) {
-  //handle submit event
+document.getElementById('weatherForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const city = document.getElementById('cityInput').value.trim().replace(/ /g, '+');
+
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('temp').textContent = data.main.temp + ' °F';
+      document.getElementById('humidity').textContent = data.main.humidity + ' %';
+      document.getElementById('conditions').textContent = data.weather[0].description;
+    })
+    .catch(err => console.error('Error fetching current weather:', err));
+
+  getForecast(city);
+});
+
+function getForecast(city) {
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`)
+    .then(response => response.json())
+    .then(data => {
+      const forecastDiv = document.getElementById('forecast');
+      forecastDiv.innerHTML = '';
+
+      const labels = [];
+      const temps = [];
+
+      data.list.forEach(item => {
+        const forecastItem = document.createElement('div');
+        forecastItem.innerHTML = `<strong>${item.dt_txt}</strong><br>
+          Temp: ${item.main.temp} °F<br>
+          Humidity: ${item.main.humidity} %<br>`;
+        forecastDiv.appendChild(forecastItem);
+
+        labels.push(item.dt_txt);
+        temps.push(item.main.temp);
+      });
+
+      renderChart(labels, temps);
+    })
+    .catch(err => console.error('Error fetching forecast:', err));
 }
 
-function fetchCurrentWeather(city) {
-  //fetch current weather based on city
+function renderChart(labels, dataPoints) {
+  const ctx = document.getElementById('forecastChart').getContext('2d');
+
+  if (window.myChart instanceof Chart) {
+    window.myChart.destroy();
+  }
+
+  window.myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Temperature (°F)',
+        data: dataPoints,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        tension: 0.3
+      }]
+    },
+    options: {
+      scales: {
+        x: { display: true },
+        y: { display: true }
+      }
+    }
+  });
 }
-
-function displayCurrentWeather(json) {
-  //render current weather data to the DOM using provided IDs and json from API
-}
-
-
-function fetchFiveDayForecast(city) {
-  //fetch five day forecast data based on city
-}
-
-function displayFiveDayForecast(json) {
-  //render five day forecast data to the DOM using provided IDs and json from API
-}
-
-function createChart(json) {
-  //Bonus: render temperature chart using five day forecast data and ChartJS
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  //add event listener here for form submission
-})
