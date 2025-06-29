@@ -1,71 +1,38 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Weather App</title>
-  <script src="index.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-  <link rel="stylesheet" href="css/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table, td { border: 1px solid #ccc; padding: 8px; }
+    #forecast div { margin-bottom: 10px; }
+  </style>
 </head>
 <body>
 
-  <form id="cityForm" action="">
-    <input type="text" placeholder="Enter city" id="city"/>
-    <input type="submit"/>
+  <h1>Weather App</h1>
+
+  <form id="weatherForm">
+    <input type="text" id="cityInput" placeholder="Enter a city">
+    <button type="submit">Get Weather</button>
   </form>
 
-  <h2>Today</h2>
-  <section id="today">
-    <table>
-      <tr>
-        <th >
-          Current Temperature
-        </th>
-        <th>
-          Low
-        </th>
-        <th>
-          High
-        </th>
-        <th>
-          Humidity
-        </th>
-        <th>
-          Cloud Cover
-        </th>
-      </tr>
-      <tr>
-        <td id="temp">
+  <h2>Current Weather</h2>
+  <table>
+    <tr><td>Temperature:</td><td id="temp"></td></tr>
+    <tr><td>Humidity:</td><td id="humidity"></td></tr>
+    <tr><td>Conditions:</td><td id="conditions"></td></tr>
+  </table>
 
-        </td>
-        <td id="low">
+  <h2>5-Day Forecast (Every 3 Hours)</h2>
+  <aside id="forecast"></aside>
 
-        </td>
-        <td id="high">
+  <h2>Temperature Trend</h2>
+  <canvas id="forecastChart" width="400" height="200"></canvas>
 
-        </td>
-        <td id="humidity">
-
-        </td>
-        <td id="cloudCover">
-
-        </td>
-        <td id="sunrise">
-
-        </td>
-        <td id="sunset">
-
-        </td>
-      </tr>
-    </table>
-  </section>
-
-  <!-- Optional -->
-  <canvas id="WeatherChart"></canvas>
-
-  <h2>Five Day Forcast</h2>
-  <aside>
-
-  </aside>
-
+  <script src="js/index.js"></script>
 
 </body>
 </html>
